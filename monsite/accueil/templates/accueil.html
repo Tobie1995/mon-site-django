@@ -10,6 +10,17 @@
 
     <hr>
 
+    <h2>Ma liste de tâches</h2>
+    <ul>
+        {% for task in tasks %}
+            <li>{{ task }}</li>
+        {% empty %}
+            <li>Aucune tâche pour le moment</li>
+        {% endfor %}
+    </ul>
+
+    <hr>
+
     <h2>Donne ton nom</h2>
     <form method="post">
         {% csrf_token %}
