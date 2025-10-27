@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <title>Accueil</title>
+</head>
+<body>
+    <h1>{{ message }}</h1>
+    <p>Aujourd'hui : {{ today }}</p>
+
+    <hr>
+
+    <h2>Donne ton nom</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Envoyer</button>
+    </form>
+</body>
+</html>
