@@ -1,31 +1,43 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="utf-8">
     <title>Accueil</title>
+    <link rel="stylesheet" href="{% static 'accueil/style.css' %}">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
 </head>
 <body>
-    <h1>{{ message }}</h1>
-    <p>Aujourd'hui : {{ today }}</p>
+  <div class="container">
+    <div class="card">
+      <h1>{{ message }}</h1>
+      <p class="today">Aujourd'hui : {{ today }}</p>
 
-    <hr>
+      <hr>
 
-    <h2>Ma liste de tâches</h2>
-    <ul>
-        {% for task in tasks %}
-            <li>{{ task }}</li>
-        {% empty %}
-            <li>Aucune tâche pour le moment</li>
-        {% endfor %}
-    </ul>
+      <h2>Ma liste de tâches</h2>
+      <ul class="tache-list">
+          {% for tache in taches %}
+              <li>
+                  <span class="tache-title">{{ tache.titre }}</span>
+                  {% if tache.termine %}
+                      <span class="tache-termine">✓</span>
+                  {% endif %}
+              </li>
+          {% empty %}
+              <li>Aucune tâche pour le moment</li>
+          {% endfor %}
+      </ul>
 
-    <hr>
+      <hr>
 
-    <p>Quel est ton nom ?</p>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Envoyer</button>
-    </form>
+      <p>Quel est ton nom ?</p>
+      <form method="post">
+          {% csrf_token %}
+          {{ form.as_p }}
+          <button type="submit">Envoyer</button>
+      </form>
+    </div>
+  </div>
 </body>
 </html>
