@@ -1,46 +1,48 @@
-from django.shortcuts import render
-from django.utils import timezone
-from .forms import NameForm
+from django.shortcuts import render, redirect
+from .forms import TacheForm
 from .models import Tache  # Importer le modèle Tache
 
 
-def index(request):
-	"""Affiche la page d'accueil avec un message selon l'heure et un formulaire de nom.
+def liste_taches(request):
+	"""Affiche la liste des tâches et les formulaires (GET uniquement).
 
-	- Avant midi : "Bon matin !"
-	- Après midi : "Bon après-midi !"
+	- Méthode GET : affiche la liste, le formulaire d'ajout (vide) et le
+	  formulaire de saisie du nom. Si le formulaire `NameForm` est soumis en
+	  GET (méthode="get" dans le template), le nom est utilisé pour
+	  personnaliser le message.
 	"""
-	# Use Django timezone-aware local time so the greeting follows
-	# the project's TIME_ZONE setting instead of the system local time.
-	current_hour = timezone.localtime(timezone.now()).hour
-	if current_hour < 12:
-		default_message = "Bon matin !"
-	else:
-		default_message = "Bon après-midi"
+	# Remplacer le message dépendant de l'heure par un message statique
+	default_message = "Bonjour !"
 
-	# Récupère toutes les tâches depuis la base de données, ordonnées par titre.
-	# En cas d'erreur (par ex. base non migrée), on retourne une liste vide pour éviter une erreur 500.
 	try:
 		liste_taches = Tache.objects.order_by('titre')
 	except Exception:
 		liste_taches = []
 
-	if request.method == 'POST':
-		form = NameForm(request.POST)
-		if form.is_valid():
-			name = form.cleaned_data['name']
-			message = f"{default_message} {name} !"
-		else:
-			message = default_message
-	else:
-		form = NameForm()
-		message = default_message
+	# Message statique (la personnalisation par nom a été retirée)
+	message = default_message
+
+	tache_form = TacheForm()
 
 	context = {
 		'message': message,
-		'today': timezone.now().date(),
-		'form': form,
+		'tache_form': tache_form,
 		'taches': liste_taches,
 	}
 
 	return render(request, 'accueil.html', context)
+
+
+def ajouter_tache(request):
+	"""Gère uniquement l'ajout d'une nouvelle tâche (POST).
+
+	En cas d'appel en GET ou autre méthode, redirige vers la vue de liste.
+	"""
+	if request.method != 'POST':
+		return redirect('index')
+
+	tache_form = TacheForm(request.POST)
+	if tache_form.is_valid():
+		tache_form.save()
+
+	return redirect('index')

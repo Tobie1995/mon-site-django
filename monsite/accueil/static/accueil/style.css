@@ -1,71 +1,179 @@
-/* Simple styles to center the page and add spacing between tasks */
+/* Modernized styles: typography, spacing, better forms and task items */
+
+:root{
+  --bg:#eef6ff;
+  --card:#ffffff;
+  --muted:#6b7280;
+  --accent:#2563eb;
+  --accent-600:#1e40af;
+  --success:#16a34a;
+  --surface-shadow: 0 8px 30px rgba(2,6,23,0.08);
+  --radius:10px;
+  --gap:0.75rem; /* reduced spacing */
+  --max-width:720px; /* narrower card */
+}
+
 html, body {
   height: 100%;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
-  background: #f5f7fb;
-  color: #222;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  background: linear-gradient(180deg, var(--bg) 0%, #f8fbff 100%);
+  color: #0f172a;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
 }
 
+/* Make sizing predictable so inputs don't overflow */
+*, *::before, *::after { box-sizing: border-box; }
+
 .container {
-  min-height: 100vh; /* ensure vertical centering */
+  min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 2rem;
+  padding: 2.5rem;
 }
 
 .card {
   width: 100%;
-  max-width: 820px;
-  background: #fff;
-  padding: 1.5rem 2rem;
-  border-radius: 8px;
-  box-shadow: 0 6px 24px rgba(15, 23, 42, 0.06);
+  max-width: var(--max-width);
+  background: var(--card);
+  padding: calc(var(--gap) * 1.1); /* reduced padding */
+  border-radius: var(--radius);
+  box-shadow: var(--surface-shadow);
+  border: 1px solid rgba(15,23,42,0.04);
+  margin: 0 auto; /* center horizontally */
+  align-self: center; /* ensure vertical centering inside flex container */
 }
 
-.today {
-  color: #555;
-  margin-top: 0.25rem;
+.card h1{
+  margin: 0 0 0.2rem 0;
+  font-size: 1.4rem;
+  letter-spacing: -0.01em;
+}
+
+.card h2{
+  margin: 0 0 0.5rem 0;
+  font-size: 1.125rem;
+  color: #0b1220;
+}
+
+.card hr{
+  border: none;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(0,0,0,0.04), rgba(0,0,0,0.02));
+  margin: 0.8rem 0; /* slightly tighter */
 }
 
 .tache-list {
   list-style: none;
   padding: 0;
-  margin: 0.5rem 0 0 0;
+  margin: 0.35rem 0 0 0; /* reduce top margin */
+  display: grid;
+  gap: 0.4rem; /* tighter gap */
 }
 
 .tache-list li {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.6rem 0;
-  border-bottom: 1px solid #eef2f6;
+  padding: 0.6rem 0.7rem; /* reduced padding */
+  background: linear-gradient(180deg, rgba(37,99,235,0.01), rgba(37,99,235,0.00));
+  border-radius: 8px;
+  border: 1px solid rgba(15,23,42,0.03);
 }
 
-.tache-list li:last-child {
-  border-bottom: none;
+.tache-list li .left{
+  display:flex;
+  align-items:center;
+  gap:0.75rem;
 }
 
 .tache-title {
   font-size: 1rem;
+  color: #081124;
 }
 
 .tache-termine {
-  color: #16a34a; /* green */
-  font-weight: 600;
+  color: var(--success);
+  font-weight: 700;
   margin-left: 0.5rem;
 }
 
-form button {
-  background: #2563eb;
-  color: #fff;
-  border: none;
-  padding: 0.5rem 0.9rem;
-  border-radius: 6px;
-  cursor: pointer;
+.tache-non-termine{
+  color: #ef4444; /* red */
+  font-weight: 700;
+  margin-left: 0.5rem;
 }
 
-form button:hover {
-  background: #1e40af;
+/* Form styles */
+form p {
+  margin: 0 0 0.6rem 0;
 }
+
+input[type="text"], input[type="search"], input[type="url"], textarea, select {
+  width: 100%;
+  max-width: 100%;
+  padding: 0.5rem 0.6rem; /* slightly smaller */
+  border-radius: 8px;
+  border: 1px solid rgba(15,23,42,0.08);
+  background: #fff;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.5);
+  transition: box-shadow .15s ease, border-color .12s ease;
+  font-size: 0.95rem;
+  word-wrap: break-word; /* prevent overflow */
+}
+
+input:focus, textarea:focus, select:focus{
+  outline: none;
+  border-color: rgba(37,99,235,0.8);
+  box-shadow: 0 6px 20px rgba(37,99,235,0.06);
+}
+
+label{
+  display:block;
+  margin-bottom:0.25rem;
+  color:var(--muted);
+  font-size:0.9rem;
+}
+
+/* Button styles */
+button[type="submit"], form button{
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  padding: 0.5rem 0.85rem; /* slightly smaller */
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: transform .08s ease, background .12s ease, box-shadow .12s ease;
+  box-shadow: 0 6px 18px rgba(37,99,235,0.12);
+}
+
+button[type="submit"]:hover, form button:hover{
+  background: var(--accent-600);
+  transform: translateY(-1px);
+}
+
+/* Small helper for empty state */
+.tache-list li.empty{
+  justify-content:center;
+  color:var(--muted);
+  background: transparent;
+  border: none;
+}
+
+/* Responsive adjustments */
+@media (max-width:600px){
+  .card{ padding:0.75rem; }
+  .tache-list li{ padding:0.5rem; }
+  .card h1{ font-size:1.15rem }
+  :root{ --max-width: 92%; }
+}
+
+/* subtle animation for adding tasks if JS later used */
+@keyframes popIn{ from{ transform: scale(.98); opacity:0 } to{ transform:scale(1); opacity:1 } }
+.tache-list li{ animation: popIn .18s ease both; }
