@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.utils import timezone
 from .forms import NameForm
+from .models import Tache  # Importer le modèle Tache
 
 
 def index(request):
@@ -17,12 +18,12 @@ def index(request):
 	else:
 		default_message = "Bon après-midi"
 
-	tasks = [
-		"Acheter du pain",
-		"Envoyer l'email au client",
-		"Apprendre Django: créer une vue",
-		"Faire les tests unitaires"
-	]
+	# Récupère toutes les tâches depuis la base de données, ordonnées par titre.
+	# En cas d'erreur (par ex. base non migrée), on retourne une liste vide pour éviter une erreur 500.
+	try:
+		liste_taches = Tache.objects.order_by('titre')
+	except Exception:
+		liste_taches = []
 
 	if request.method == 'POST':
 		form = NameForm(request.POST)
@@ -39,7 +40,7 @@ def index(request):
 		'message': message,
 		'today': timezone.now().date(),
 		'form': form,
-		'tasks': tasks,
+		'taches': liste_taches,
 	}
 
 	return render(request, 'accueil.html', context)
