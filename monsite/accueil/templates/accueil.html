@@ -10,18 +10,20 @@
 <body>
   <div class="container">
     <div class="card">
-      <h1>{{ message }}</h1>
-      <p class="today">Aujourd'hui : {{ today }}</p>
+    <h1>{{ message }}</h1>
 
       <hr>
-
       <h2>Ma liste de tâches</h2>
       <ul class="tache-list">
           {% for tache in taches %}
               <li>
-                  <span class="tache-title">{{ tache.titre }}</span>
+                  <div class="left">
+                      <span class="tache-title">{{ tache.titre }}</span>
+                  </div>
                   {% if tache.termine %}
-                      <span class="tache-termine">✓</span>
+                      <span class="tache-termine" title="Terminée">✓</span>
+                  {% else %}
+                      <span class="tache-non-termine" title="Non terminée">✗</span>
                   {% endif %}
               </li>
           {% empty %}
@@ -31,12 +33,15 @@
 
       <hr>
 
-      <p>Quel est ton nom ?</p>
-      <form method="post">
+      <!-- Formulaire pour ajouter une nouvelle tâche -->
+      <h3>Ajouter une tâche</h3>
+      <form method="post" action="{% url 'ajouter_tache' %}">
           {% csrf_token %}
-          {{ form.as_p }}
-          <button type="submit">Envoyer</button>
+          {{ tache_form.as_p }}
+          <button type="submit">Ajouter Tâche</button>
       </form>
+
+      <!-- Le formulaire de saisie du nom a été retiré. -->
     </div>
   </div>
 </body>
